@@ -1,4 +1,4 @@
-import { connectRabbit } from './rabbit/rabbit';
+import connectRabbit from './rabbit/rabbit';
 
 (async () => {
   await connectRabbit();

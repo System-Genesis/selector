@@ -55,3 +55,14 @@ export const logWorn = (msg: string, any?: any) => {
   });
   logger.error(`${msg} ${!any ? '' : JSON.stringify(any)}`);
 };
+
+export const logError = (msg: string, any?: any) => {
+  menash.send(configEnv.rabbit.logger, {
+    level: 'error',
+    message: `${msg}. ${any ? JSON.stringify(any) : ''}`,
+    system: 'traking',
+    service: 'build entity',
+    extraFields: any,
+  });
+  logger.error(`${msg} ${!any ? '' : JSON.stringify(any)}`);
+};

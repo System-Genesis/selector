@@ -1,7 +1,7 @@
 import { menash, ConsumerMessage } from 'menashmq';
 import config from '../config/env.config';
 import { selector } from '../selector/main';
-import { logInfo, logWorn } from '../logger/logger';
+import { logError, logInfo } from '../logger/logger';
 import { mergedObj } from '../types/mergedObjType';
 import { record } from '../types/recordType';
 
@@ -19,13 +19,12 @@ export const connectRabbit = async () => {
     async (msg: ConsumerMessage) => {
       try {
         const mergedObj = msg.getContent() as mergedObj;
-        logInfo(`Got from queue => `, mergedObj);
 
         await selector(mergedObj);
 
         msg.ack();
       } catch (error) {
-        logWorn(error);
+        logError(error);
 
         // handle error reject or else ...
         msg.ack();
@@ -35,12 +34,12 @@ export const connectRabbit = async () => {
   );
 };
 
-export const entityQueue = async (entityToBuild: mergedObj) => {
+export const sentToEntityQueue = async (entityToBuild: mergedObj) => {
   await menash.send(config.rabbit.sendDataEntity, entityToBuild);
 };
 
-export const rogdQueue = async (record: record) => {
+export const sendToRogdQueue = async (record: record) => {
   await menash.send(config.rabbit.sendDataEntity, record);
 };
 
-export default { connectRabbit };
+export default connectRabbit;
