@@ -1,7 +1,7 @@
 import { menash, ConsumerMessage } from 'menashmq';
 import config from '../config/env.config';
 import { selector } from '../selector/main';
-import { logInfo, logError } from '../logger/logger';
+import { logInfo, logWorn } from '../logger/logger';
 import { mergedObj } from '../types/mergedObjType';
 import { record } from '../types/recordType';
 
@@ -25,7 +25,7 @@ export const connectRabbit = async () => {
 
         msg.ack();
       } catch (error) {
-        logError(error);
+        logWorn(error);
 
         // handle error reject or else ...
         msg.ack();

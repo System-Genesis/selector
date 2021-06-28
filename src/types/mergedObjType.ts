@@ -1,13 +1,15 @@
 import { record } from './recordType';
 
+export type mergedRecord = { updatedAt: Date; record: record };
+
 export type mergedObj = {
-  aka?: { record: record }[];
-  eightSocks?: { record: record }[];
-  sf?: { record: record }[];
-  city?: { record: record }[];
-  adNn?: { record: record }[];
-  adS?: { record: record }[];
-  mir?: { record: record }[];
+  aka?: { record: record; updatedAt: Date }[];
+  eightSocks?: { record: record; updatedAt: Date }[];
+  sf?: { record: record; updatedAt: Date }[];
+  city?: { record: record; updatedAt: Date }[];
+  adNn?: { record: record; updatedAt: Date }[];
+  adS?: { record: record; updatedAt: Date }[];
+  mir?: { record: record; updatedAt: Date }[];
 
   identifiers: {
     personalNumber: string;
