@@ -1,12 +1,13 @@
-import { entity } from './entityType';
+import { record } from './recordType';
 
 export type mergedObj = {
-  aka?: { record: entity }[];
-  eightSocks?: { record: entity }[];
-  sf?: { record: entity }[];
-  city?: { record: entity }[];
-  adNn?: { record: entity }[];
-  adS?: { record: entity }[];
+  aka?: { record: record }[];
+  eightSocks?: { record: record }[];
+  sf?: { record: record }[];
+  city?: { record: record }[];
+  adNn?: { record: record }[];
+  adS?: { record: record }[];
+  mir?: { record: record }[];
 
   identifiers: {
     personalNumber: string;

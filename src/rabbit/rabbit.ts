@@ -1,15 +1,16 @@
-import menash, { ConsumerMessage } from 'menashmq';
+import { menash, ConsumerMessage } from 'menashmq';
 import config from '../config/env.config';
+import { selector } from '../selector/main';
 import { logInfo, logError } from '../logger/logger';
-import { createEntity } from '../service/buildEntity';
-import { entity } from '../types/entityType';
 import { mergedObj } from '../types/mergedObjType';
+import { record } from '../types/recordType';
 
 export const connectRabbit = async () => {
   await menash.connect(config.rabbit.uri, config.rabbit.retryOptions);
 
   await menash.declareQueue(config.rabbit.getData);
-  await menash.declareQueue(config.rabbit.sendData);
+  await menash.declareQueue(config.rabbit.sendDataEntity);
+  await menash.declareQueue(config.rabbit.sendDataRogd);
   await menash.declareQueue(config.rabbit.logger);
 
   logInfo('Rabbit connected');
@@ -20,18 +21,9 @@ export const connectRabbit = async () => {
         const mergedObj = msg.getContent() as mergedObj;
         logInfo(`Got from queue => `, mergedObj);
 
-        const entity = await createEntity(mergedObj);
+        await selector(mergedObj);
 
-        if (entity) {
-          logInfo('Entity builded');
-
-          await sendRecordToDiff(entity);
-          logInfo('Send to dif queue');
-
-          msg.ack();
-        } else {
-          throw 'Entity not builded';
-        }
+        msg.ack();
       } catch (error) {
         logError(error);
 
@@ -43,12 +35,12 @@ export const connectRabbit = async () => {
   );
 };
 
-export const sendRecordToDiff = async (data: entity) => {
-  try {
-    await menash.send(config.rabbit.sendData, data);
-  } catch (error) {
-    logInfo(`${error}`.split('at C')[0]);
-  }
+export const entityQueue = async (entityToBuild: mergedObj) => {
+  await menash.send(config.rabbit.sendDataEntity, entityToBuild);
 };
 
-export default { connectRabbit, sendRecordToDiff };
+export const rogdQueue = async (record: record) => {
+  await menash.send(config.rabbit.sendDataEntity, record);
+};
+
+export default { connectRabbit };
