@@ -12,8 +12,8 @@ export type mergedObj = {
   mir?: { record: record; updatedAt: Date }[];
 
   identifiers: {
-    personalNumber: string;
-    identityCard: string;
-    goalUser: string;
+    personalNumber?: string;
+    identityCard?: string;
+    goalUser?: string;
   };
 };
