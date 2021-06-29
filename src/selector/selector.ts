@@ -2,22 +2,40 @@ import { logInfo, logWarn as logWarn } from '../logger/logger';
 import { mergedObj, mergedRecord } from '../types/mergedObjType';
 import { sendToEntityQueue, sendToRogdQueue } from '../rabbit/rabbit';
 import { record } from '../types/recordType';
-import { validC, validS } from '../util/util';
+import { isC, isS } from '../util/util';
 
+/**
+ * Check if object can send to build entity
+ * Find updated record
+ * If not send to build entity: updated record to not connect DI to Entity
+ * Send record to build ROGD as is
+ *
+ * @param mergeObj objet from merger service
+ */
 export const selector = (mergeObj: mergedObj): void => {
   logInfo('Got mergeObj', mergeObj.identifiers);
   let canBuildEntity = true;
 
-  // Didn't build entity from mergeObject with:
-  //    only mir source
-  //    or s without personalNumber
-  //    or c without identityCard
+  /**
+   * Didn't build entity from mergeObject with:
+   *    only mir source
+   *    or c without identityCard
+   *    or s without personalNumber
+   */
   if (mergeObj.mir && Object.keys(mergeObj).length <= 2) {
     logWarn(`didn't build entity from mergeObj with only mir source`, mergeObj.identifiers);
     canBuildEntity = false;
-  } else if (!validC(mergeObj) && !validS(mergeObj)) {
+  } else if (isC(mergeObj)) {
+    if (!mergeObj.identifiers.identityCard) {
+      logWarn(
+        "Didn't build entity from mergeObj because C without identityCard",
+        mergeObj.identifiers
+      );
+      canBuildEntity = false;
+    }
+  } else if (isS(mergeObj) && !mergeObj.identifiers.personalNumber) {
     logWarn(
-      "didn't build entity from mergeObj because entityType didn't match the identifier",
+      "Didn't build entity from mergeObj because S without personal number",
       mergeObj.identifiers
     );
     canBuildEntity = false;
