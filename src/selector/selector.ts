@@ -1,10 +1,11 @@
-import { logInfo, logWorn as logWorn } from '../logger/logger';
+import { logInfo, logWarn as logWarn } from '../logger/logger';
 import { mergedObj, mergedRecord } from '../types/mergedObjType';
 import { sendToEntityQueue, sendToRogdQueue } from '../rabbit/rabbit';
 import { record } from '../types/recordType';
 import { validC, validS } from '../util/util';
 
 export const selector = (mergeObj: mergedObj): void => {
+  logInfo('Got mergeObj', mergeObj.identifiers);
   let canBuildEntity = true;
 
   // Didn't build entity from mergeObject with:
@@ -12,10 +13,10 @@ export const selector = (mergeObj: mergedObj): void => {
   //    or s without personalNumber
   //    or c without identityCard
   if (mergeObj.mir && Object.keys(mergeObj).length <= 2) {
-    logWorn(`didn't build entity from mergeObj with only mir source`, mergeObj.identifiers);
+    logWarn(`didn't build entity from mergeObj with only mir source`, mergeObj.identifiers);
     canBuildEntity = false;
-  } else if (!validS(mergeObj) && !validC(mergeObj)) {
-    logWorn(
+  } else if (!validC(mergeObj) && !validS(mergeObj)) {
+    logWarn(
       "didn't build entity from mergeObj because entityType didn't match the identifier",
       mergeObj.identifiers
     );
@@ -34,8 +35,15 @@ export const selector = (mergeObj: mergedObj): void => {
     delete record.goalUserId;
   }
 
-  logInfo('send To build Rogd queue', { identifiers: mergeObj.identifiers, source: record.source });
-  sendToRogdQueue(record);
+  if (record.userId) {
+    logInfo('Send To build Rogd queue', {
+      identifiers: mergeObj.identifiers,
+      source: record.source,
+    });
+    sendToRogdQueue(record);
+  } else {
+    logWarn("Didn't sent to  build ROGD because no userId", mergeObj.identifiers);
+  }
 };
 
 export function findNewestRecord(mergeObj: mergedObj) {

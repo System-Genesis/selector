@@ -45,7 +45,7 @@ export const logInfo = (msg: string, any?: any) => {
   else logger.info(msg);
 };
 
-export const logWorn = (msg: string, any?: any) => {
+export const logWarn = (msg: string, any?: any) => {
   menash.send(configEnv.rabbit.logger, {
     level: 'warning',
     message: `${msg}. ${any ? JSON.stringify(any) : ''}`,
