@@ -46,21 +46,18 @@ export const selector = (mergeObj: mergedObj): void => {
   if (canBuildEntity) {
     logInfo('send To build Entity queue', mergeObj.identifiers);
     sendToEntityQueue(mergeObj);
-  } else {
-    // If not build entity delete entity identifiers (build DI without connect to entity)
-    delete record.personalNumber;
-    delete record.identityCard;
-    delete record.goalUserId;
-  }
 
-  if (record.userId) {
-    logInfo('Send To build Rogd queue', {
-      identifiers: mergeObj.identifiers,
-      source: record.source,
-    });
-    sendToRogdQueue(record);
+    if (record.userId) {
+      logInfo('Send To build Rogd queue', {
+        identifiers: mergeObj.identifiers,
+        source: record.source,
+      });
+      sendToRogdQueue(record);
+    } else {
+      logWarn("Didn't sent to  build ROGD because no userId", mergeObj.identifiers);
+    }
   } else {
-    logWarn("Didn't sent to  build ROGD because no userId", mergeObj.identifiers);
+    logWarn("Didn't sent to  build ROGD because entity not builded", mergeObj.identifiers);
   }
 };
 
