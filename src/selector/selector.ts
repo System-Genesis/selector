@@ -41,11 +41,11 @@ export const selector = (mergeObj: mergedObj): void => {
     canBuildEntity = false;
   }
 
-  const record: record = findNewestRecord(mergeObj);
-
   if (canBuildEntity) {
     logInfo('send To build Entity queue', mergeObj.identifiers);
     sendToEntityQueue(mergeObj);
+
+    const record: record = findNewestRecord(mergeObj);
 
     if (record.userId) {
       logInfo('Send To build Rogd queue', {
