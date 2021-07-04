@@ -33,7 +33,7 @@ describe('utils', () => {
 
     const res = validS(mergeObj);
 
-    assert.isTrue(res);
+    assert.isTrue(!!res);
   });
 
   it('Should return true. C with identityCard', () => {
@@ -53,7 +53,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj);
 
-    assert.isTrue(res);
+    assert.isTrue(!!res);
   });
 
   it('Should return false. C with personalNumber', () => {
@@ -73,7 +73,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj);
 
-    assert.isFalse(res);
+    assert.isFalse(!!res);
   });
 
   it('Should return false. S with identityCard', () => {
@@ -93,7 +93,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj);
 
-    assert.isFalse(res);
+    assert.isFalse(!!res);
   });
 
   it('Should return true. S&C with identityCard', () => {
@@ -113,7 +113,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj) || validS(mergeObj);
 
-    assert.isTrue(res);
+    assert.isTrue(!!res);
   });
 
   it('Should return true. S&C with personalNumber', () => {
@@ -133,7 +133,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj) || validS(mergeObj);
 
-    assert.isTrue(res);
+    assert.isTrue(!!res);
   });
 
   it('Should return false. S&C without personalNumber or identityCard', () => {
@@ -151,7 +151,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj) || validS(mergeObj);
 
-    assert.isFalse(res);
+    assert.isFalse(!!res);
   });
 
   it('Should return false. C without identityCard', () => {
@@ -169,7 +169,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj) || validS(mergeObj);
 
-    assert.isFalse(res);
+    assert.isFalse(!!res);
   });
 
   it('Should return false. S without personalNumber', () => {
@@ -187,6 +187,6 @@ describe('utils', () => {
 
     const res = validC(mergeObj) || validS(mergeObj);
 
-    assert.isFalse(res);
+    assert.isFalse(!!res);
   });
 });

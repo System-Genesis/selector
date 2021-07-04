@@ -61,6 +61,12 @@ export const selector = (mergeObj: mergedObj): void => {
   }
 };
 
+/**
+ * Find the record that need to work with (send to rogd queue)
+ *
+ * @param mergeObj contains all records under source field
+ * @returns the last update record
+ */
 export function findNewestRecord(mergeObj: mergedObj) {
   let newestRecord: mergedRecord = { record: {}, updatedAt: new Date(0) };
 
