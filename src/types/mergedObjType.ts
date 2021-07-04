@@ -1,16 +1,19 @@
-import { entity } from './entityType';
+import { record } from './recordType';
+
+export type mergedRecord = { updatedAt: Date; record: record };
 
 export type mergedObj = {
-  aka?: { record: entity }[];
-  eightSocks?: { record: entity }[];
-  sf?: { record: entity }[];
-  city?: { record: entity }[];
-  adNn?: { record: entity }[];
-  adS?: { record: entity }[];
+  aka?: { record: record; updatedAt: Date }[];
+  eightSocks?: { record: record; updatedAt: Date }[];
+  sf?: { record: record; updatedAt: Date }[];
+  city?: { record: record; updatedAt: Date }[];
+  adNn?: { record: record; updatedAt: Date }[];
+  adS?: { record: record; updatedAt: Date }[];
+  mir?: { record: record; updatedAt: Date }[];
 
   identifiers: {
-    personalNumber: string;
-    identityCard: string;
-    goalUser: string;
+    personalNumber?: string;
+    identityCard?: string;
+    goalUser?: string;
   };
 };
