@@ -3,6 +3,7 @@ import { mergedObj, mergedRecord } from '../types/mergedObjType';
 import { sendToEntityQueue, sendToRogdQueue } from '../rabbit/rabbit';
 import { record } from '../types/recordType';
 import { isC, isS } from '../util/util';
+import LOGS from '../logger/logs';
 
 /**
  * Check if object can send to build entity
@@ -14,7 +15,6 @@ import { isC, isS } from '../util/util';
  */
 export const selector = (mergeObj: mergedObj): void => {
   logInfo('Got mergeObj', mergeObj.identifiers);
-  let canBuildEntity = true;
 
   /**
    * Didn't build entity from mergeObject with:
@@ -23,41 +23,31 @@ export const selector = (mergeObj: mergedObj): void => {
    *    or s without personalNumber
    */
   if (mergeObj.mir && Object.keys(mergeObj).length <= 2) {
-    logWarn(`didn't build entity from mergeObj with only mir source`, mergeObj.identifiers);
-    canBuildEntity = false;
+    return logWarn(`${LOGS.WARN.RGBE_NOT_SENDED} only mir source`, mergeObj.identifiers);
   } else if (isC(mergeObj)) {
     if (!mergeObj.identifiers.identityCard) {
-      logWarn(
-        "Didn't build entity from mergeObj because C without identityCard",
-        mergeObj.identifiers
-      );
-      canBuildEntity = false;
+      return logWarn(`${LOGS.WARN.RGBE_NOT_SENDED} C without identityCard`, mergeObj.identifiers);
     }
   } else if (isS(mergeObj) && !mergeObj.identifiers.personalNumber) {
-    logWarn(
-      "Didn't build entity from mergeObj because S without personal number",
-      mergeObj.identifiers
-    );
-    canBuildEntity = false;
+    return logWarn(`${LOGS.WARN.RGBE_NOT_SENDED} S without personal number`, mergeObj.identifiers);
   }
 
-  if (canBuildEntity) {
-    logInfo('send To build Entity queue', mergeObj.identifiers);
-    sendToEntityQueue(mergeObj);
+  logInfo(`${LOGS.INFO.SEND_QUEUE} Entity queue`, mergeObj.identifiers);
+  sendToEntityQueue(mergeObj);
 
-    const record: record = findNewestRecord(mergeObj);
+  const record: record = findNewestRecord(mergeObj);
 
-    if (record.userId) {
-      logInfo('Send To build Rogd queue', {
-        identifiers: mergeObj.identifiers,
-        source: record.source,
-      });
-      sendToRogdQueue(record);
-    } else {
-      logWarn("Didn't sent to  build ROGD because no userId", mergeObj.identifiers);
-    }
+  if (record.userId) {
+    logInfo(`${LOGS.INFO.SEND_QUEUE} Rogd queue`, {
+      ...mergeObj.identifiers,
+      source: record.source,
+    });
+    sendToRogdQueue(record);
   } else {
-    logWarn("Didn't sent to  build ROGD because entity not builded", mergeObj.identifiers);
+    logWarn(`${LOGS.WARN.RGB_NOT_SENDED}no userId`, {
+      ...mergeObj.identifiers,
+      source: record.source,
+    });
   }
 };
 

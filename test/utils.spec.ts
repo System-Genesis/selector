@@ -1,5 +1,3 @@
-import { assert } from 'chai';
-// import { mergedObj, mergedRecord } from '../src/types/mergedObjType';
 import { validC, validS } from '../src/util/util';
 
 /**
@@ -33,7 +31,7 @@ describe('utils', () => {
 
     const res = validS(mergeObj);
 
-    assert.isTrue(!!res);
+    expect(res).toBeTruthy;
   });
 
   it('Should return true. C with identityCard', () => {
@@ -53,7 +51,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj);
 
-    assert.isTrue(!!res);
+    expect(res).toBeTruthy;
   });
 
   it('Should return false. C with personalNumber', () => {
@@ -73,7 +71,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj);
 
-    assert.isFalse(!!res);
+    expect(res).toBeFalsy;
   });
 
   it('Should return false. S with identityCard', () => {
@@ -93,7 +91,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj);
 
-    assert.isFalse(!!res);
+    expect(res).toBeFalsy;
   });
 
   it('Should return true. S&C with identityCard', () => {
@@ -113,7 +111,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj) || validS(mergeObj);
 
-    assert.isTrue(!!res);
+    expect(res).toBeTruthy;
   });
 
   it('Should return true. S&C with personalNumber', () => {
@@ -133,7 +131,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj) || validS(mergeObj);
 
-    assert.isTrue(!!res);
+    expect(res).toBeTruthy;
   });
 
   it('Should return false. S&C without personalNumber or identityCard', () => {
@@ -151,7 +149,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj) || validS(mergeObj);
 
-    assert.isFalse(!!res);
+    expect(res).toBeFalsy;
   });
 
   it('Should return false. C without identityCard', () => {
@@ -169,7 +167,7 @@ describe('utils', () => {
 
     const res = validC(mergeObj) || validS(mergeObj);
 
-    assert.isFalse(!!res);
+    expect(res).toBeFalsy;
   });
 
   it('Should return false. S without personalNumber', () => {
@@ -187,6 +185,6 @@ describe('utils', () => {
 
     const res = validC(mergeObj) || validS(mergeObj);
 
-    assert.isFalse(!!res);
+    expect(res).toBeFalsy;
   });
 });
