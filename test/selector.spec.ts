@@ -22,7 +22,7 @@ describe('selector', () => {
     it('Should fall because only mir source', () => {
       selector({ mir: [{ record: {}, updatedAt: new Date() }], identifiers: {} });
 
-      expect(warnStr.includes('mir')).toBeTruthy;
+      expect(warnStr.includes('mir')).toBeTruthy();
     });
 
     it("Should didn't fall when has mir source", () => {
@@ -40,7 +40,7 @@ describe('selector', () => {
         aka: [{ record: { entityType: 'digimon' }, updatedAt: new Date() }],
         identifiers: { personalNumber: '1621441' },
       });
-      expect(warnStr.includes('C without identityCard')).toBeTruthy;
+      expect(warnStr.includes('C without identityCard')).toBeTruthy();
     });
 
     it('Should fall because C without personalNumber', () => {
@@ -48,7 +48,7 @@ describe('selector', () => {
         aka: [{ record: { entityType: 'agumon' }, updatedAt: new Date() }],
         identifiers: { identityCard: '1621441' },
       });
-      expect(warnStr.includes('S without personal number')).toBeTruthy;
+      expect(warnStr.includes('S without personal number')).toBeTruthy();
     });
 
     it('Should send only to entity', () => {
@@ -56,7 +56,7 @@ describe('selector', () => {
         aka: [{ record: { entityType: 'digimon' }, updatedAt: new Date() }],
         identifiers: { identityCard: '1621441' },
       });
-      expect(infoStr.includes('Send To build Entity queue')).toBeTruthy;
+      expect(infoStr.includes('Entity queue')).toBeTruthy();
     });
 
     it('Should send also to rogd', () => {
@@ -64,7 +64,7 @@ describe('selector', () => {
         eightSocks: [{ record: { entityType: 'digimon', userId: 'ds' }, updatedAt: new Date() }],
         identifiers: { identityCard: '1621441' },
       });
-      expect(infoStr.includes('Rogd')).toBeTruthy;
+      expect(infoStr.includes('Rogd')).toBeTruthy();
     });
   });
 
