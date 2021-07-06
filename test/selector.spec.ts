@@ -1,4 +1,4 @@
-import { findNewestRecord } from '../src/selector/selector';
+import { findNewestRecord } from '../src/util/util';
 import { selector } from '../src/selector/selector';
 
 let warnStr = '';

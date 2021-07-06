@@ -1,9 +1,10 @@
-import { logInfo, logWarn as logWarn } from '../logger/logger';
-import { mergedObj, mergedRecord } from '../types/mergedObjType';
-import { sendToEntityQueue, sendToRogdQueue } from '../rabbit/rabbit';
+import { logWarn } from '../logger/logger';
+import { mergedObj, mergedRecord } from '../types/mergedType';
 import { record } from '../types/recordType';
-import { isC, isS } from '../util/util';
-import LOGS from '../logger/logs';
+import { recordHandler } from './recordHandler';
+import { entityHandler } from './entityHandler';
+import { findNewestRecord } from '../util/util';
+import { runType } from '../types/runType';
 
 /**
  * Check if object can send to build entity
@@ -13,61 +14,31 @@ import LOGS from '../logger/logs';
  *
  * @param mergeObj objet from merger service
  */
-export const selector = (mergeObj: mergedObj): void => {
-  logInfo('Got mergeObj', mergeObj.identifiers);
+export const selector = (mergeObj: mergedObj, type: runType = runType.DAILY) => {
+  try {
+    entityHandler(mergeObj);
 
-  /**
-   * Didn't build entity from mergeObject with:
-   *    only mir source
-   *    or c without identityCard
-   *    or s without personalNumber
-   */
-  if (mergeObj.mir && Object.keys(mergeObj).length <= 2) {
-    return logWarn(`${LOGS.WARN.RGBE_NOT_SENDED} only mir source`, mergeObj.identifiers);
-  } else if (isC(mergeObj)) {
-    if (!mergeObj.identifiers.identityCard) {
-      return logWarn(`${LOGS.WARN.RGBE_NOT_SENDED} C without identityCard`, mergeObj.identifiers);
-    }
-  } else if (isS(mergeObj) && !mergeObj.identifiers.personalNumber) {
-    return logWarn(`${LOGS.WARN.RGBE_NOT_SENDED} S without personal number`, mergeObj.identifiers);
-  }
-
-  logInfo(`${LOGS.INFO.SEND_QUEUE} Entity queue`, mergeObj.identifiers);
-  sendToEntityQueue(mergeObj);
-
-  const record: record = findNewestRecord(mergeObj);
-
-  if (record.userId) {
-    logInfo(`${LOGS.INFO.SEND_QUEUE} Rogd queue`, {
-      ...mergeObj.identifiers,
-      source: record.source,
-    });
-    sendToRogdQueue(record);
-  } else {
-    logWarn(`${LOGS.WARN.RGB_NOT_SENDED}no userId`, {
-      ...mergeObj.identifiers,
-      source: record.source,
-    });
+    if (type === runType.RECOVERY) recovery(mergeObj);
+    else if (type === runType.DAILY) daily(mergeObj);
+  } catch (error) {
+    logWarn(error, mergeObj.identifiers);
   }
 };
 
+function daily(mergeObj: mergedObj) {
+  const record: record = findNewestRecord(mergeObj);
+
+  recordHandler(record, mergeObj);
+}
+
 /**
- * Find the record that need to work with (send to rogd queue)
- *
+ * Run on all records and send to recordHandler()
  * @param mergeObj contains all records under source field
- * @returns the last update record
  */
-export function findNewestRecord(mergeObj: mergedObj) {
-  let newestRecord: mergedRecord = { record: {}, updatedAt: new Date(0) };
-
+export function recovery(mergeObj: mergedObj) {
   Object.keys(mergeObj).forEach((source) => {
-    if (source !== 'identifiers')
-      mergeObj[source].forEach((rec: mergedRecord) => {
-        if (rec.updatedAt > newestRecord.updatedAt) {
-          newestRecord = rec;
-        }
-      });
+    if (source !== 'identifiers') {
+      mergeObj[source].forEach(({ record }: mergedRecord) => recordHandler(record, mergeObj));
+    }
   });
-
-  return newestRecord.record;
 }
