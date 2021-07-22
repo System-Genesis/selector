@@ -59,7 +59,7 @@ export const sendToEntityQueue = async (entityToBuild: mergedObj) => {
 };
 
 export const sendToRogdQueue = async (record: record) => {
-  await menash.send(config.rabbit.sendDataEntity, record);
+  await menash.send(config.rabbit.sendDataRogd, record);
 };
 
 export default connectRabbit;

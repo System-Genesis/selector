@@ -10,13 +10,13 @@ import LOGS from '../logger/logs';
  * @param mergeObj for logs
  */
 export function recordHandler(record: record, mergeObj: mergedObj) {
-  if (record.userId) {
+  if (record.userID) {
     logInfo(`${LOGS.INFO.SEND_QUEUE} Rogd queue`, {
       ...mergeObj.identifiers,
       source: record.source,
     });
     sendToRogdQueue(record);
   } else {
-    throw `${LOGS.WARN.RGB_NOT_SENDED}no userId, from ${record.source}`;
+    throw `${LOGS.WARN.RGB_NOT_SENDED} no userId, from ${record.source}`;
   }
 }

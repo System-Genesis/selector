@@ -18,7 +18,10 @@ import LOGS from '../logger/logs';
 export function entityHandler(mergeObj: mergedObj) {
   logInfo('Got mergeObj', mergeObj.identifiers);
 
-  if (mergeObj.mir && Object.keys(mergeObj).length <= 2) {
+  if (
+    mergeObj.mir &&
+    ((mergeObj._id && Object.keys(mergeObj).length <= 3) || Object.keys(mergeObj).length <= 2)
+  ) {
     throw `${LOGS.WARN.RGBE_NOT_SENDED} only mir source`;
   } else if (isC(mergeObj)) {
     if (!mergeObj.identifiers.identityCard) {

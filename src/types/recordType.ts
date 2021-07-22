@@ -6,5 +6,5 @@ export type record = {
   personalNumber?: string;
   firstName?: string;
   source?: string;
-  userId?: string;
+  userID?: string;
 };

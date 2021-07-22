@@ -16,4 +16,5 @@ export type mergedObj = {
     identityCard?: string;
     goalUser?: string;
   };
+  _id?: string;
 };

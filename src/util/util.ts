@@ -33,7 +33,7 @@ export function findNewestRecord(mergeObj: mergedObj) {
   let newestRecord: mergedRecord = { record: {}, updatedAt: new Date(0) };
 
   Object.keys(mergeObj).forEach((source) => {
-    if (source !== 'identifiers')
+    if (source !== 'identifiers' && source !== '_id')
       mergeObj[source].forEach((rec: mergedRecord) => {
         if (rec.updatedAt > newestRecord.updatedAt) {
           newestRecord = rec;
