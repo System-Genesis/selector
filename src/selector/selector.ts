@@ -38,7 +38,8 @@ function daily(mergeObj: mergedObj) {
 export function recovery(mergeObj: mergedObj) {
   Object.keys(mergeObj).forEach((source) => {
     if (source !== 'identifiers') {
-      mergeObj[source].forEach(({ record }: mergedRecord) => recordHandler(record, mergeObj));
+      const sourceRecords: mergedRecord[] = mergeObj[source];
+      sourceRecords.forEach(({ record }: mergedRecord) => recordHandler(record, mergeObj));
     }
   });
 }

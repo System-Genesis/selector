@@ -60,8 +60,14 @@ describe('recovery', () => {
   it('Should send one record (DAILY)', () => {
     selector(
       {
-        mir: [{ record: { personalNumber: '1621441' }, updatedAt: new Date() }],
-        aka: [{ record: { entityType: 'agumon' }, updatedAt: new Date() }],
+        mir: [
+          { record: { personalNumber: '1621441' }, updatedAt: new Date() },
+          { record: { entityType: 'agumon' }, updatedAt: new Date() },
+        ],
+        aka: [
+          { record: { personalNumber: '1621441' }, updatedAt: new Date() },
+          { record: { entityType: 'agumon' }, updatedAt: new Date() },
+        ],
         identifiers: { personalNumber: '1621441' },
       },
       runType.DAILY
