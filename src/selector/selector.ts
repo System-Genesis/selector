@@ -39,7 +39,13 @@ export function recovery(mergeObj: mergedObj) {
   Object.keys(mergeObj).forEach((source) => {
     if (source !== 'identifiers') {
       const sourceRecords: mergedRecord[] = mergeObj[source];
-      sourceRecords.forEach(({ record }: mergedRecord) => recordHandler(record, mergeObj));
+      sourceRecords.forEach(({ record }: mergedRecord) => {
+        try {
+          recordHandler(record, mergeObj);
+        } catch (error) {
+          logWarn(error, mergeObj.identifiers);
+        }
+      });
     }
   });
 }
