@@ -1,5 +1,6 @@
 import { mergedObj, mergedRecord } from '../types/mergedType';
 import fieldsName from '../config/fieldsName';
+import env from '../config/env.config';
 
 export function validC(mergeObj: mergedObj) {
   return (
@@ -42,4 +43,9 @@ export function findNewestRecord(mergeObj: mergedObj) {
   });
 
   return newestRecord.record;
+}
+
+export function isValidEntity(mergeObj: mergedObj) {
+  const mergeString = JSON.stringify(mergeObj);
+  return     env.requiredFields.reduce((bool, field) => mergeString.includes(field) || bool, false)
 }

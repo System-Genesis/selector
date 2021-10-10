@@ -1,7 +1,7 @@
 import { logInfo } from '../logger/logger';
 import { mergedObj } from '../types/mergedType';
 import { sendToEntityQueue } from '../rabbit/rabbit';
-import { isC, isS } from '../util/util';
+import { isC, isS, isValidEntity } from '../util/util';
 import LOGS from '../logger/logs';
 
 /**
@@ -18,6 +18,9 @@ import LOGS from '../logger/logs';
 export function entityHandler(mergeObj: mergedObj) {
   logInfo('Got mergeObj', mergeObj.identifiers);
 
+  if (!isValidEntity(mergeObj)) {
+    throw `${LOGS.WARN.RGBE_NOT_SENDED} missing required fields in entity`;
+  } else 
   if (
     mergeObj.mir &&
     ((mergeObj._id && Object.keys(mergeObj).length <= 3) || Object.keys(mergeObj).length <= 2)

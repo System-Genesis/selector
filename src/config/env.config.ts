@@ -3,6 +3,7 @@ import './dotenv';
 import * as env from 'env-var';
 
 export default {
+  requiredFields: env.get('ENTITY_REQUIRED_FIELDS').required().asArray(),
   rabbit: {
     uri: env.get('MATCH_TO_KART_RABBIT_URI').required().asString(),
     sendDataEntity: env.get('SEND_DATA_ENTITY').required().asString(),
