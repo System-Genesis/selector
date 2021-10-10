@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "test": "jest --coverage",
-    "start": "nodemon ./src/app.ts"
+    "start": "nodemon ./src/app.ts",
+    "docker": "docker build -t systemgenesis0/selector . & docker push systemgenesis0/selector"
   },
   "repository": {
     "type": "git",

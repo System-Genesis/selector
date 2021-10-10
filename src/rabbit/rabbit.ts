@@ -40,6 +40,8 @@ export const connectRabbit = async () => {
       try {
         const mergedObj = msg.getContent() as mergedObj;
 
+        cleanObj(mergedObj);
+
         selector(mergedObj, runType.RECOVERY);
 
         msg.ack();
@@ -63,3 +65,9 @@ export const sendToRogdQueue = async (record: record) => {
 };
 
 export default connectRabbit;
+
+function cleanObj(obj: object) {
+  Object.keys(obj).forEach((key) => {
+    if (obj[key] == null || obj[key] == undefined) delete obj[key];
+  });
+}
