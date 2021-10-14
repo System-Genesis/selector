@@ -22,7 +22,7 @@ export const logInfo = (msg: string, any?: any) => {
   else logger.info(msg);
 };
 
-export const logWarn = (msg: string, any?: any) => {
+export const logWarn = (msg: any, any?: any) => {
   menash.send(configEnv.rabbit.logger, {
     level: 'warning',
     message: `${msg}. ${any ? JSON.stringify(any) : ''}`,
@@ -33,7 +33,7 @@ export const logWarn = (msg: string, any?: any) => {
   logger.warn(`${msg} ${!any ? '' : JSON.stringify(any)}`);
 };
 
-export const logError = (msg: string, any?: any) => {
+export const logError = (msg: any, any?: any) => {
   menash.send(configEnv.rabbit.logger, {
     level: 'error',
     message: `${msg}. ${any ? JSON.stringify(any) : ''}`,
