@@ -47,5 +47,5 @@ export function findNewestRecord(mergeObj: mergedObj) {
 
 export function isValidEntity(mergeObj: mergedObj) {
   const mergeString = JSON.stringify(mergeObj);
-  return     env.requiredFields.reduce((bool, field) => mergeString.includes(field) || bool, false)
+  return env.requiredFields.reduce((bool, field) => mergeString.includes(field) && bool, true)
 }
