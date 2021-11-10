@@ -21,15 +21,18 @@ jest.mock('../src/rabbit/rabbit', () => {
 describe('selector', () => {
   describe('selector', () => {
     it('Should fall because only mir source', () => {
-      selector({ mir: [{ record: {}, updatedAt: new Date() }], identifiers: {} });
+      selector({
+        mir: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
+        identifiers: {},
+      });
 
       expect(warnStr.includes('mir')).toBeTruthy();
     });
 
     it("Should didn't fall when has mir source", () => {
       selector({
-        mir: [{ record: {}, updatedAt: new Date() }],
-        aka: [{ record: {}, updatedAt: new Date() }],
+        mir: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
+        aka: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
         identifiers: {},
       });
 
@@ -38,7 +41,7 @@ describe('selector', () => {
 
     it('Should fall because C without identityCard', () => {
       selector({
-        aka: [{ record: { entityType: 'digimon' }, updatedAt: new Date() }],
+        aka: [{ record: { firstName: 'sf', entityType: 'digimon' }, updatedAt: new Date() }],
         identifiers: { personalNumber: '1621441' },
       });
       expect(warnStr.includes('C without identityCard')).toBeTruthy();
@@ -46,7 +49,7 @@ describe('selector', () => {
 
     it('Should fall because C without personalNumber', () => {
       selector({
-        aka: [{ record: { entityType: 'agumon' }, updatedAt: new Date() }],
+        aka: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
         identifiers: { identityCard: '1621441' },
       });
       expect(warnStr.includes('S without personal number')).toBeTruthy();
@@ -54,7 +57,7 @@ describe('selector', () => {
 
     it('Should send only to entity', () => {
       selector({
-        aka: [{ record: { entityType: 'digimon' }, updatedAt: new Date() }],
+        aka: [{ record: { entityType: 'digimon', firstName: 'sf' }, updatedAt: new Date() }],
         identifiers: { identityCard: '1621441' },
       });
       expect(infoStr.includes('Entity queue')).toBeTruthy();
@@ -63,7 +66,7 @@ describe('selector', () => {
     it('Should send also to rogd', () => {
       selector({
         eightSocks: [
-          { record: { entityType: 'digimon', userID: 'ds' } as any, updatedAt: new Date() },
+          { record: { firstName: 'sf', entityType: 'digimon', userID: 'ds' } as any, updatedAt: new Date() },
         ],
         identifiers: { identityCard: '1621441' },
       });
@@ -74,12 +77,12 @@ describe('selector', () => {
   describe('findNewestRecord', () => {
     it('Should return sf', () => {
       let mergeObj = {
-        aka: [{ record: { firstName: 'a', personalNumber: '1621441' }, updatedAt: new Date(10) }],
-        eightSocks: [{ record: { firstName: 'b' }, updatedAt: new Date(11) }],
-        sf: [{ record: { firstName: 'sf' }, updatedAt: new Date(20) }],
-        city: [{ record: { firstName: 'c' }, updatedAt: new Date(13) }],
-        adNn: [{ record: { firstName: 'e' }, updatedAt: new Date(14) }],
-        adS: [{ record: { firstName: 'f' }, updatedAt: new Date(15) }],
+        aka: [{ record: { entityType: 'agumon', firstName: 'a', personalNumber: '1621441' }, updatedAt: new Date(10) }],
+        eightSocks: [{ record: { entityType: 'agumon', firstName: 'b' }, updatedAt: new Date(11) }],
+        sf: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date(20) }],
+        city: [{ record: { entityType: 'agumon', firstName: 'c' }, updatedAt: new Date(13) }],
+        adNn: [{ record: { entityType: 'agumon', firstName: 'e' }, updatedAt: new Date(14) }],
+        adS: [{ record: { entityType: 'agumon', firstName: 'f' }, updatedAt: new Date(15) }],
         mir: [{ record: { firstName: 'i', entityType: 'agumon' }, updatedAt: new Date(16) }],
 
         identifiers: {
@@ -95,13 +98,13 @@ describe('selector', () => {
 
     it('Should return ads', () => {
       let mergeObj = {
-        aka: [{ record: { firstName: 'a', personalNumber: '1621441' }, updatedAt: new Date(10) }],
-        eightSocks: [{ record: { firstName: 'b' }, updatedAt: new Date(11) }],
-        sf: [{ record: { firstName: 'sf' }, updatedAt: new Date(12) }],
-        city: [{ record: { firstName: 'c' }, updatedAt: new Date(13) }],
-        adNn: [{ record: { firstName: 'e' }, updatedAt: new Date(14) }],
-        adS: [{ record: { firstName: 'ads' }, updatedAt: new Date(20) }],
-        mir: [{ record: { firstName: 'i', entityType: 'agumon' }, updatedAt: new Date(16) }],
+        aka: [{ record: { entityType: 'agumon', firstName: 'a', personalNumber: '1621441' }, updatedAt: new Date(10) }],
+        eightSocks: [{ record: { entityType: 'agumon', firstName: 'b' }, updatedAt: new Date(11) }],
+        sf: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date(12) }],
+        city: [{ record: { entityType: 'agumon', firstName: 'c' }, updatedAt: new Date(13) }],
+        adNn: [{ record: { entityType: 'agumon', firstName: 'e' }, updatedAt: new Date(14) }],
+        adS: [{ record: { entityType: 'agumon', firstName: 'ads' }, updatedAt: new Date(20) }],
+        mir: [{ record: { entityType: 'agumon', firstName: 'i' }, updatedAt: new Date(16) }],
 
         identifiers: {
           personalNumber: '1621441',
@@ -119,7 +122,10 @@ describe('selector', () => {
 describe('selector', () => {
   describe('selector', () => {
     it('Should fall because only mir source', () => {
-      selector({ mir: [{ record: {}, updatedAt: new Date() }], identifiers: {} }, runType.RECOVERY);
+      selector(
+        { mir: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }], identifiers: {} },
+        runType.RECOVERY
+      );
 
       expect(warnStr.includes('mir')).toBeTruthy();
     });
@@ -127,8 +133,8 @@ describe('selector', () => {
     it("Should didn't fall when has mir source", () => {
       selector(
         {
-          mir: [{ record: {}, updatedAt: new Date() }],
-          aka: [{ record: {}, updatedAt: new Date() }],
+          mir: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
+          aka: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
           identifiers: {},
         },
         runType.RECOVERY
@@ -140,7 +146,7 @@ describe('selector', () => {
     it('Should fall because C without identityCard', () => {
       selector(
         {
-          aka: [{ record: { entityType: 'digimon' }, updatedAt: new Date() }],
+          aka: [{ record: { firstName: 'sf', entityType: 'digimon' }, updatedAt: new Date() }],
           identifiers: { personalNumber: '1621441' },
         },
         runType.RECOVERY
@@ -152,7 +158,7 @@ describe('selector', () => {
     it('Should fall because C without personalNumber', () => {
       selector(
         {
-          aka: [{ record: { entityType: 'agumon' }, updatedAt: new Date() }],
+          aka: [{ record: { firstName: 'sf', entityType: 'agumon' }, updatedAt: new Date() }],
           identifiers: { identityCard: '1621441' },
         },
         runType.RECOVERY
@@ -164,7 +170,7 @@ describe('selector', () => {
     it('Should send only to entity', () => {
       selector(
         {
-          aka: [{ record: { entityType: 'digimon' }, updatedAt: new Date() }],
+          aka: [{ record: { firstName: 'sf', entityType: 'digimon' }, updatedAt: new Date() }],
           identifiers: { identityCard: '1621441' },
         },
         runType.RECOVERY
@@ -177,7 +183,7 @@ describe('selector', () => {
       selector(
         {
           eightSocks: [
-            { record: { entityType: 'digimon', userID: 'ds' } as any, updatedAt: new Date() },
+            { record: { firstName: 'sf', entityType: 'digimon', userID: 'ds' } as any, updatedAt: new Date() },
           ],
           identifiers: { identityCard: '1621441' },
         },
