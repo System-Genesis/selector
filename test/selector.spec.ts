@@ -1,6 +1,7 @@
 import { findNewestRecord } from '../src/util/util';
 import { selector } from '../src/selector/selector';
 import { runType } from '../src/types/runType';
+import { onlyMir } from '../src/selector/entityHandler';
 
 let warnStr = '';
 let infoStr = '';
@@ -22,17 +23,17 @@ describe('selector', () => {
   describe('selector', () => {
     it('Should fall because only mir source', () => {
       selector({
-        mir: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
+        sf: [{ record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() }],
         identifiers: {},
       });
 
-      expect(warnStr.includes('mir')).toBeTruthy();
+      expect(warnStr.includes('sf')).toBeTruthy();
     });
 
     it("Should didn't fall when has mir source", () => {
       selector({
         mir: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
-        aka: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
+        aka: [{ record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() }],
         identifiers: {},
       });
 
@@ -57,7 +58,7 @@ describe('selector', () => {
 
     it('Should send only to entity', () => {
       selector({
-        aka: [{ record: { entityType: 'digimon', firstName: 'sf' }, updatedAt: new Date() }],
+        aka: [{ record: { entityType: 'digimon', firstName: 'sf', identityCard: '1621441' }, updatedAt: new Date() }],
         identifiers: { identityCard: '1621441' },
       });
       expect(infoStr.includes('Entity queue')).toBeTruthy();
@@ -121,19 +122,24 @@ describe('selector', () => {
 
 describe('selector', () => {
   describe('selector', () => {
-    it('Should fall because only mir source', () => {
+    it('Should fall because only sf source', () => {
       selector(
-        { mir: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }], identifiers: {} },
+        {
+          sf: [{ record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() }],
+          identifiers: {},
+        },
         runType.RECOVERY
       );
 
-      expect(warnStr.includes('mir')).toBeTruthy();
+      expect(warnStr.includes('sf')).toBeTruthy();
     });
 
     it("Should didn't fall when has mir source", () => {
       selector(
         {
-          mir: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
+          mir: [
+            { record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() },
+          ],
           aka: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
           identifiers: {},
         },
@@ -191,6 +197,18 @@ describe('selector', () => {
       );
 
       expect(infoStr.includes('Rogd')).toBeTruthy();
+    });
+  });
+
+  describe('only mir', () => {
+    it('should', () => {
+      expect(onlyMir({ m: [], a: 's', q: {} } as any)).toBe(1);
+    });
+    it('should', () => {
+      expect(onlyMir({ m: [], a: 's', q: {}, as: [] } as any)).toBe(2);
+    });
+    it('should', () => {
+      expect(onlyMir({ m: 23, a: 's', q: {}, as: {} } as any)).toBe(0);
     });
   });
 });

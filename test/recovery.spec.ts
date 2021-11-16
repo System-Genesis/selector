@@ -29,12 +29,12 @@ describe('recovery', () => {
     selector(
       {
         mir: [
-          { record: { personalNumber: '1621441' }, updatedAt: new Date() },
-          { record: { entityType: 'agumon' }, updatedAt: new Date() },
+          { record: { firstName: 'sf', entityType: 'agumon', personalNumber: '1621441' }, updatedAt: new Date() },
+          { record: { firstName: 'sf', entityType: 'agumon' }, updatedAt: new Date() },
         ],
         aka: [
-          { record: { personalNumber: '1621441' }, updatedAt: new Date() },
-          { record: { entityType: 'agumon' }, updatedAt: new Date() },
+          { record: { firstName: 'sf', entityType: 'agumon', personalNumber: '1621441' }, updatedAt: new Date() },
+          { record: { firstName: 'sf', entityType: 'agumon' }, updatedAt: new Date() },
         ],
         identifiers: { personalNumber: '1621441' },
       },
