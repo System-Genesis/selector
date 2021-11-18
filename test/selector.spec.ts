@@ -23,18 +23,18 @@ describe('selector', () => {
   describe('selector', () => {
     it('Should fall because only mir source', () => {
       selector({
-        sf: [{ record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() }],
-        identifiers: {},
+        mir: [{ record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() }],
+        identifiers: { personalNumber: '1621441' },
       });
 
-      expect(warnStr.includes('sf')).toBeTruthy();
+      expect(warnStr.includes('mir')).toBeTruthy();
     });
 
     it("Should didn't fall when has mir source", () => {
       selector({
         mir: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
         aka: [{ record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() }],
-        identifiers: {},
+        identifiers: { personalNumber: '1621441' },
       });
 
       expect(warnStr.includes('mir')).toBeFalsy;
@@ -122,16 +122,18 @@ describe('selector', () => {
 
 describe('selector', () => {
   describe('selector', () => {
-    it('Should fall because only sf source', () => {
+    it('Should fall because only mir source', () => {
       selector(
         {
-          sf: [{ record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() }],
+          mir: [
+            { record: { entityType: 'agumon', firstName: 'mir', personalNumber: '1621441' }, updatedAt: new Date() },
+          ],
           identifiers: {},
         },
         runType.RECOVERY
       );
 
-      expect(warnStr.includes('sf')).toBeTruthy();
+      expect(warnStr.includes('mir')).toBeTruthy();
     });
 
     it("Should didn't fall when has mir source", () => {
