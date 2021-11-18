@@ -5,7 +5,7 @@ import { isC, isS, isValidEntity } from '../util/util';
 import LOGS from '../logger/logs';
 
 export const onlyMir = (mergedObj: mergedObj) => {
-  return Object.keys(mergedObj).reduce((sum, curr) => (sum += Array.isArray(mergedObj[curr]) ? 1 : 0), 0);
+  return Object.keys(mergedObj).reduce((sum, curr) => (sum += Array.isArray(mergedObj[curr]) ? 1 : 0), 0) === 1;
 };
 
 /**
@@ -24,7 +24,7 @@ export function entityHandler(mergeObj: mergedObj) {
 
   if (!isValidEntity(mergeObj)) {
     throw `${LOGS.WARN.RGBE_NOT_SENDED} missing required fields in entity`;
-  } else if (mergeObj.mir && onlyMir(mergeObj) <= 1) {
+  } else if (mergeObj.mir && onlyMir(mergeObj)) {
     throw `${LOGS.WARN.RGBE_NOT_SENDED} only mir source`;
   } else if (isC(mergeObj)) {
     if (!mergeObj.identifiers.identityCard) {
