@@ -204,13 +204,13 @@ describe('selector', () => {
 
   describe('only mir', () => {
     it('should', () => {
-      expect(onlyMir({ m: [], a: 's', q: {} } as any)).toBe(1);
+      expect(onlyMir({ m: [], a: 's', q: {} } as any)).toBe(true);
     });
     it('should', () => {
-      expect(onlyMir({ m: [], a: 's', q: {}, as: [] } as any)).toBe(2);
+      expect(onlyMir({ m: [], a: 's', q: {}, as: [] } as any)).toBe(false);
     });
     it('should', () => {
-      expect(onlyMir({ m: 23, a: 's', q: {}, as: {} } as any)).toBe(0);
+      expect(onlyMir({ m: 23, a: 's', q: {}, as: {} } as any)).toBe(false);
     });
   });
 });
