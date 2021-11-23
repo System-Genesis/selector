@@ -1,10 +1,10 @@
-import { logWarn } from '../logger/logger';
 import { mergedObj, mergedRecord } from '../types/mergedType';
 import { record } from '../types/recordType';
 import { recordHandler } from './recordHandler';
 import { entityHandler } from './entityHandler';
 import { findNewestRecord } from '../util/util';
 import { runType } from '../types/runType';
+import logger from 'logger-genesis';
 
 /**
  * Check if object can send to build entity
@@ -14,14 +14,14 @@ import { runType } from '../types/runType';
  *
  * @param mergeObj objet from merger service
  */
-export const selector = (mergeObj: mergedObj, type: runType = runType.DAILY) => {
+export const selector = async (mergeObj: mergedObj, type: runType = runType.DAILY) => {
   try {
-    entityHandler(mergeObj);
+    await entityHandler(mergeObj);
 
     if (type === runType.RECOVERY) recovery(mergeObj);
     else if (type === runType.DAILY) daily(mergeObj);
   } catch (error) {
-    logWarn(error, mergeObj.identifiers);
+    logger.warn(true, 'APP', 'MargeObj not pass', `${error}`, mergeObj.identifiers);
   }
 };
 
@@ -43,7 +43,7 @@ export function recovery(mergeObj: mergedObj) {
         try {
           recordHandler(record, mergeObj);
         } catch (error) {
-          logWarn(error, mergeObj.identifiers);
+          logger.warn(true, 'APP', 'MargeObj not pass', `${error}`, mergeObj.identifiers);
         }
       });
     }

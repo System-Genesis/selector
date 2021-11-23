@@ -1,8 +1,8 @@
-import { logInfo } from '../logger/logger';
 import { mergedObj } from '../types/mergedType';
 import { sendToEntityQueue } from '../rabbit/rabbit';
 import { isC, isS, isValidEntity } from '../util/util';
 import LOGS from '../logger/logs';
+import logger from 'logger-genesis';
 
 export const onlyMir = (mergedObj: mergedObj) => {
   return Object.keys(mergedObj).reduce((sum, curr) => (sum += Array.isArray(mergedObj[curr]) ? 1 : 0), 0);
@@ -19,8 +19,8 @@ export const onlyMir = (mergedObj: mergedObj) => {
  *
  * @param mergeObj all sources of entity
  */
-export function entityHandler(mergeObj: mergedObj) {
-  logInfo('Got mergeObj', mergeObj.identifiers);
+export async function entityHandler(mergeObj: mergedObj) {
+  logger.info(false, 'APP', 'Got from entity queue', JSON.stringify(mergeObj), mergeObj);
 
   if (!isValidEntity(mergeObj)) {
     throw `${LOGS.WARN.RGBE_NOT_SENDED} missing required fields in entity`;
@@ -34,6 +34,6 @@ export function entityHandler(mergeObj: mergedObj) {
     throw `${LOGS.WARN.RGBE_NOT_SENDED} S without personal number`;
   }
 
-  logInfo(`${LOGS.INFO.SEND_QUEUE} Entity queue`, mergeObj.identifiers);
-  sendToEntityQueue(mergeObj);
+  await sendToEntityQueue(mergeObj);
+  logger.info(false, 'APP', `${LOGS.INFO.SEND_QUEUE}: Entity`, 'Send to Entity queue', mergeObj.identifiers);
 }

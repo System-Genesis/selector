@@ -3,6 +3,8 @@ import './dotenv';
 import * as env from 'env-var';
 
 export default {
+  serviceName: env.get('SERVICE_NAME').required().asString(),
+  systemName: env.get('SYSTEM_NAME').required().asString(),
   requiredFields: env.get('ENTITY_REQUIRED_FIELDS').required().asArray(),
   rabbit: {
     uri: env.get('MATCH_TO_KART_RABBIT_URI').required().asString(),

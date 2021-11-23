@@ -6,9 +6,9 @@ import { onlyMir } from '../src/selector/entityHandler';
 let warnStr = '';
 let infoStr = '';
 
-jest.mock('../src/logger/logger', () => ({
-  logInfo: (str: string, _: any) => (infoStr = str),
-  logWarn: (str: string, _: any) => (warnStr = str),
+jest.mock('logger-genesis', () => ({
+  info: (_a, _b, _c, str: string) => (infoStr = str),
+  warn: (_a, _b, _c, str: string) => (warnStr = str),
 }));
 
 jest.mock('../src/rabbit/rabbit', () => {
@@ -21,8 +21,8 @@ jest.mock('../src/rabbit/rabbit', () => {
 
 describe('selector', () => {
   describe('selector', () => {
-    it('Should fall because only mir source', () => {
-      selector({
+    it('Should fall because only mir source', async () => {
+      await selector({
         mir: [{ record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() }],
         identifiers: { personalNumber: '1621441' },
       });
@@ -30,8 +30,8 @@ describe('selector', () => {
       expect(warnStr.includes('mir')).toBeTruthy();
     });
 
-    it("Should didn't fall when has mir source", () => {
-      selector({
+    it("Should didn't fall when has mir source", async () => {
+      await selector({
         mir: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
         aka: [{ record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() }],
         identifiers: { personalNumber: '1621441' },
@@ -40,38 +40,38 @@ describe('selector', () => {
       expect(warnStr.includes('mir')).toBeFalsy;
     });
 
-    it('Should fall because C without identityCard', () => {
-      selector({
+    it('Should fall because C without identityCard', async () => {
+      await selector({
         aka: [{ record: { firstName: 'sf', entityType: 'digimon' }, updatedAt: new Date() }],
         identifiers: { personalNumber: '1621441' },
       });
       expect(warnStr.includes('C without identityCard')).toBeTruthy();
     });
 
-    it('Should fall because C without personalNumber', () => {
-      selector({
+    it('Should fall because C without personalNumber', async () => {
+      await selector({
         aka: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
         identifiers: { identityCard: '1621441' },
       });
       expect(warnStr.includes('S without personal number')).toBeTruthy();
     });
 
-    it('Should send only to entity', () => {
-      selector({
+    it('Should send only to entity', async () => {
+      await selector({
         aka: [{ record: { entityType: 'digimon', firstName: 'sf', identityCard: '1621441' }, updatedAt: new Date() }],
         identifiers: { identityCard: '1621441' },
       });
-      expect(infoStr.includes('Entity queue')).toBeTruthy();
+      expect(infoStr.includes('Entity')).toBeTruthy();
     });
 
-    it('Should send also to rogd', () => {
-      selector({
+    it('Should send also to rogd', async () => {
+      await selector({
         eightSocks: [
           { record: { firstName: 'sf', entityType: 'digimon', userID: 'ds' } as any, updatedAt: new Date() },
         ],
         identifiers: { identityCard: '1621441' },
       });
-      expect(infoStr.includes('Rogd')).toBeTruthy();
+      expect(infoStr.includes('ROGD')).toBeTruthy();
     });
   });
 
@@ -122,8 +122,8 @@ describe('selector', () => {
 
 describe('selector', () => {
   describe('selector', () => {
-    it('Should fall because only mir source', () => {
-      selector(
+    it('Should fall because only mir source', async () => {
+      await selector(
         {
           mir: [
             { record: { entityType: 'agumon', firstName: 'mir', personalNumber: '1621441' }, updatedAt: new Date() },
@@ -136,8 +136,8 @@ describe('selector', () => {
       expect(warnStr.includes('mir')).toBeTruthy();
     });
 
-    it("Should didn't fall when has mir source", () => {
-      selector(
+    it("Should didn't fall when has mir source", async () => {
+      await selector(
         {
           mir: [
             { record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() },
@@ -151,8 +151,8 @@ describe('selector', () => {
       expect(warnStr.includes('mir')).toBeFalsy;
     });
 
-    it('Should fall because C without identityCard', () => {
-      selector(
+    it('Should fall because C without identityCard', async () => {
+      await selector(
         {
           aka: [{ record: { firstName: 'sf', entityType: 'digimon' }, updatedAt: new Date() }],
           identifiers: { personalNumber: '1621441' },
@@ -163,8 +163,8 @@ describe('selector', () => {
       expect(warnStr.includes('C without identityCard')).toBeTruthy();
     });
 
-    it('Should fall because C without personalNumber', () => {
-      selector(
+    it('Should fall because C without personalNumber', async () => {
+      await selector(
         {
           aka: [{ record: { firstName: 'sf', entityType: 'agumon' }, updatedAt: new Date() }],
           identifiers: { identityCard: '1621441' },
@@ -175,8 +175,8 @@ describe('selector', () => {
       expect(warnStr.includes('S without personal number')).toBeTruthy();
     });
 
-    it('Should send only to entity', () => {
-      selector(
+    it('Should send only to entity', async () => {
+      await selector(
         {
           aka: [{ record: { firstName: 'sf', entityType: 'digimon' }, updatedAt: new Date() }],
           identifiers: { identityCard: '1621441' },
@@ -187,8 +187,8 @@ describe('selector', () => {
       expect(infoStr.includes('Entity queue')).toBeTruthy();
     });
 
-    it('Should send also to rogd', () => {
-      selector(
+    it('Should send also to rogd', async () => {
+      await selector(
         {
           eightSocks: [
             { record: { firstName: 'sf', entityType: 'digimon', userID: 'ds' } as any, updatedAt: new Date() },
@@ -198,7 +198,7 @@ describe('selector', () => {
         runType.RECOVERY
       );
 
-      expect(infoStr.includes('Rogd')).toBeTruthy();
+      expect(infoStr.includes('ROGD')).toBeTruthy();
     });
   });
 

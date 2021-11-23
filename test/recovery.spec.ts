@@ -1,9 +1,9 @@
 import { selector } from '../src/selector/selector';
 import { runType } from '../src/types/runType';
 
-jest.mock('../src/logger/logger', () => ({
-  logInfo: () => {},
-  logWarn: () => {},
+jest.mock('logger-genesis', () => ({
+  info: () => {},
+  warn: () => {},
 }));
 
 jest.mock('../src/rabbit/rabbit', () => {
@@ -25,8 +25,8 @@ describe('recovery', () => {
     recordCount = 0;
   });
 
-  it('Should send all record', () => {
-    selector(
+  it('Should send all record', async () => {
+    await selector(
       {
         mir: [
           { record: { firstName: 'sf', entityType: 'agumon', personalNumber: '1621441' }, updatedAt: new Date() },
@@ -44,8 +44,8 @@ describe('recovery', () => {
     expect(recordCount).toEqual(4);
   });
 
-  it('Should not send record(entity not build)', () => {
-    selector(
+  it('Should not send record(entity not build)', async () => {
+    await selector(
       {
         mir: [{ record: { firstName: 'sf', entityType: 'agumon', personalNumber: '1621441' }, updatedAt: new Date() }],
         aka: [{ record: { firstName: 'sf', entityType: 'digimon' }, updatedAt: new Date() }],
@@ -57,8 +57,8 @@ describe('recovery', () => {
     expect(recordCount).toEqual(0);
   });
 
-  it('Should send one record (DAILY)', () => {
-    selector(
+  it('Should send one record (DAILY)', async () => {
+    await selector(
       {
         mir: [
           { record: { firstName: 'sf', entityType: 'agumon', personalNumber: '1621441' }, updatedAt: new Date() },

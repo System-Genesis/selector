@@ -1,21 +1,26 @@
+import logger from 'logger-genesis';
 import { menash, ConsumerMessage } from 'menashmq';
 import config from '../config/env.config';
 import { selector } from '../selector/selector';
-import { logError, logInfo } from '../logger/logger';
 import { mergedObj } from '../types/mergedType';
 import { record } from '../types/recordType';
 import { runType } from '../types/runType';
 
 export const connectRabbit = async () => {
-  await menash.connect(config.rabbit.uri, config.rabbit.retryOptions);
+  console.log('Try to connect rabbit');
+  try {
+    await menash.connect(config.rabbit.uri, config.rabbit.retryOptions);
 
-  await menash.declareQueue(config.rabbit.getDataSelector);
-  await menash.declareQueue(config.rabbit.getDataRecovery);
-  await menash.declareQueue(config.rabbit.sendDataEntity);
-  await menash.declareQueue(config.rabbit.sendDataRogd);
-  await menash.declareQueue(config.rabbit.logger);
+    await menash.declareQueue(config.rabbit.getDataSelector);
+    await menash.declareQueue(config.rabbit.getDataRecovery);
+    await menash.declareQueue(config.rabbit.sendDataEntity);
+    await menash.declareQueue(config.rabbit.sendDataRogd);
+    await menash.declareQueue(config.rabbit.logger);
 
-  logInfo('Rabbit connected');
+    console.log('Rabbit connected');
+  } catch (error: any) {
+    logger.error(false, 'SYSTEM', 'Unknown Error, on Connect Rabbit', error.message);
+  }
 
   await menash.queue(config.rabbit.getDataSelector).activateConsumer(
     async (msg: ConsumerMessage) => {
@@ -25,10 +30,11 @@ export const connectRabbit = async () => {
         selector(mergedObj, runType.DAILY);
 
         msg.ack();
-      } catch (error) {
-        logError(error);
+      } catch (error: any) {
+        const erMsg = JSON.stringify(error.message);
 
-        // handle error reject or else ...
+        logger.error(true, 'SYSTEM', 'Unknown Error, on SELECTOR queue', erMsg);
+
         msg.ack();
       }
     },
@@ -45,8 +51,9 @@ export const connectRabbit = async () => {
         selector(mergedObj, runType.RECOVERY);
 
         msg.ack();
-      } catch (error) {
-        logError(error);
+      } catch (error: any) {
+        const erMsg = JSON.stringify(error.message);
+        logger.error(true, 'SYSTEM', 'Unknown Error RECOVERY queue', erMsg);
 
         // handle error reject or else ...
         msg.ack();
