@@ -1,0 +1,24 @@
+name: "selector"
+replicaCount: 1
+
+images:
+  PullSecrets: 
+    name: kartingreg
+  repository: genesisproject.azurecr.io/selector
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 3000
+
+# volume:
+#   -name:
+#    mountPath:
+#    type:
+#    claimName:
+
+config:
+  configmaps: 
+    name: selector
