@@ -15,7 +15,6 @@ export const connectRabbit = async () => {
     await menash.declareQueue(config.rabbit.getDataRecovery);
     await menash.declareQueue(config.rabbit.sendDataEntity);
     await menash.declareQueue(config.rabbit.sendDataRogd);
-    await menash.declareQueue(config.rabbit.logger);
 
     console.log('Rabbit connected');
   } catch (error: any) {
