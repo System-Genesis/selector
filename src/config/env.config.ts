@@ -9,7 +9,8 @@ export default {
   rabbit: {
     uri: env.get('MATCH_TO_KART_RABBIT_URI').required().asString(),
     sendDataEntity: env.get('SEND_DATA_ENTITY').required().asString(),
-    sendDataRogd: env.get('SEND_DATA_ROGD').required().asString(),
+    sendDataRogdNormal: env.get('SEND_DATA_ROGD_NORMAL').required().asString(),
+    sendDataRogdMir: env.get('SEND_DATA_ROGD_MIR').required().asString(),
     getDataSelector: env.get('GET_DATA_SELECTOR').required().asString(),
     getDataRecovery: env.get('GET_DATA_RECOVERY').required().asString(),
     logger: env.get('LOGGER').required().asString(),

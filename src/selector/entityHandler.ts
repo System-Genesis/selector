@@ -13,7 +13,7 @@ export const onlyMir = (mergedObj: mergedObj) => {
  * Throw warn error if not
  *
  * Didn't build entity from mergeObject with:
- *    only mir source
+ *    only mir source (didn't throw)
  *    or c without identityCard
  *    or s without personalNumber
  *
@@ -22,10 +22,10 @@ export const onlyMir = (mergedObj: mergedObj) => {
 export async function entityHandler(mergeObj: mergedObj) {
   logger.info(false, 'APP', 'Got from entity queue', JSON.stringify(mergeObj), mergeObj);
 
-  if (!isValidEntity(mergeObj)) {
+  if (mergeObj.mir && onlyMir(mergeObj)) {
+    return;
+  } else if (!isValidEntity(mergeObj)) {
     throw `${LOGS.WARN.RGBE_NOT_SENDED} missing required fields in entity`;
-  } else if (mergeObj.mir && onlyMir(mergeObj)) {
-    throw `${LOGS.WARN.RGBE_NOT_SENDED} only mir source`;
   } else if (isC(mergeObj)) {
     if (!mergeObj.identifiers.identityCard) {
       throw `${LOGS.WARN.RGBE_NOT_SENDED} C without identityCard`;

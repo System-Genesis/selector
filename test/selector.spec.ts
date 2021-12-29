@@ -1,7 +1,6 @@
 import { findNewestRecord } from '../src/util/util';
 import { selector } from '../src/selector/selector';
 import { runType } from '../src/types/runType';
-import { onlyMir } from '../src/selector/entityHandler';
 
 let warnStr = '';
 let infoStr = '';
@@ -15,30 +14,31 @@ jest.mock('../src/rabbit/rabbit', () => {
   return {
     default: jest.fn(),
     sendToEntityQueue: () => {},
-    sendToRogdQueue: () => {},
+    sendToRogdQueueMir: () => {},
+    sendToRogdQueueNormal: () => {},
   };
 });
 
 describe('selector', () => {
   describe('selector', () => {
-    it('Should fall because only mir source', async () => {
-      await selector({
-        mir: [{ record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() }],
-        identifiers: { personalNumber: '1621441' },
-      });
+    // it('Should fall because only mir source', async () => {
+    //   await selector({
+    //     mir: [{ record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() }],
+    //     identifiers: { personalNumber: '1621441' },
+    //   });
 
-      expect(warnStr.includes('mir')).toBeTruthy();
-    });
+    //   expect(warnStr.includes('mir')).toBeTruthy();
+    // });
 
-    it("Should didn't fall when has mir source", async () => {
-      await selector({
-        mir: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
-        aka: [{ record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() }],
-        identifiers: { personalNumber: '1621441' },
-      });
+    // it("Should didn't fall when has mir source", async () => {
+    //   await selector({
+    //     mir: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
+    //     aka: [{ record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() }],
+    //     identifiers: { personalNumber: '1621441' },
+    //   });
 
-      expect(warnStr.includes('mir')).toBeFalsy;
-    });
+    //   expect(warnStr.includes('mir')).toBeFalsy;
+    // });
 
     it('Should fall because C without identityCard', async () => {
       await selector({
@@ -122,34 +122,34 @@ describe('selector', () => {
 
 describe('selector', () => {
   describe('selector', () => {
-    it('Should fall because only mir source', async () => {
-      await selector(
-        {
-          mir: [
-            { record: { entityType: 'agumon', firstName: 'mir', personalNumber: '1621441' }, updatedAt: new Date() },
-          ],
-          identifiers: {},
-        },
-        runType.RECOVERY
-      );
+    // it('Should fall because only mir source', async () => {
+    //   await selector(
+    //     {
+    //       mir: [
+    //         { record: { entityType: 'agumon', firstName: 'mir', personalNumber: '1621441' }, updatedAt: new Date() },
+    //       ],
+    //       identifiers: {},
+    //     },
+    //     runType.RECOVERY
+    //   );
 
-      expect(warnStr.includes('mir')).toBeTruthy();
-    });
+    //   expect(warnStr.includes('mir')).toBeTruthy();
+    // });
 
-    it("Should didn't fall when has mir source", async () => {
-      await selector(
-        {
-          mir: [
-            { record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() },
-          ],
-          aka: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
-          identifiers: {},
-        },
-        runType.RECOVERY
-      );
+    // it("Should didn't fall when has mir source", async () => {
+    //   await selector(
+    //     {
+    //       mir: [
+    //         { record: { entityType: 'agumon', firstName: 'sf', personalNumber: '1621441' }, updatedAt: new Date() },
+    //       ],
+    //       aka: [{ record: { entityType: 'agumon', firstName: 'sf' }, updatedAt: new Date() }],
+    //       identifiers: {},
+    //     },
+    //     runType.RECOVERY
+    //   );
 
-      expect(warnStr.includes('mir')).toBeFalsy;
-    });
+    //   expect(warnStr.includes('mir')).toBeFalsy;
+    // });
 
     it('Should fall because C without identityCard', async () => {
       await selector(
@@ -202,15 +202,15 @@ describe('selector', () => {
     });
   });
 
-  describe('only mir', () => {
-    it('should', () => {
-      expect(onlyMir({ m: [], a: 's', q: {} } as any)).toBe(true);
-    });
-    it('should', () => {
-      expect(onlyMir({ m: [], a: 's', q: {}, as: [] } as any)).toBe(false);
-    });
-    it('should', () => {
-      expect(onlyMir({ m: 23, a: 's', q: {}, as: {} } as any)).toBe(false);
-    });
-  });
+  // describe('only mir', () => {
+  //   it('should', () => {
+  //     expect(onlyMir({ m: [], a: 's', q: {} } as any)).toBe(true);
+  //   });
+  //   it('should', () => {
+  //     expect(onlyMir({ m: [], a: 's', q: {}, as: [] } as any)).toBe(false);
+  //   });
+  //   it('should', () => {
+  //     expect(onlyMir({ m: 23, a: 's', q: {}, as: {} } as any)).toBe(false);
+  //   });
+  // });
 });

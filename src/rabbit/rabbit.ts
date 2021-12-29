@@ -14,19 +14,36 @@ export const connectRabbit = async () => {
     await menash.declareQueue(config.rabbit.getDataSelector);
     await menash.declareQueue(config.rabbit.getDataRecovery);
     await menash.declareQueue(config.rabbit.sendDataEntity);
-    await menash.declareQueue(config.rabbit.sendDataRogd);
+    await menash.declareQueue(config.rabbit.sendDataRogdNormal);
+    await menash.declareQueue(config.rabbit.sendDataRogdMir);
 
     console.log('Rabbit connected');
   } catch (error: any) {
     logger.error(false, 'SYSTEM', 'Unknown Error, on Connect Rabbit', error.message);
   }
+};
 
+export const sendToEntityQueue = async (entityToBuild: mergedObj) => {
+  await menash.send(config.rabbit.sendDataEntity, entityToBuild);
+};
+
+export const sendToRogdQueueNormal = async (record: record) => {
+  await menash.send(config.rabbit.sendDataRogdNormal, record);
+};
+
+export const sendToRogdQueueMir = async (record: record) => {
+  await menash.send(config.rabbit.sendDataRogdMir, record);
+};
+
+export default connectRabbit;
+
+export async function consumeQueues() {
   await menash.queue(config.rabbit.getDataSelector).activateConsumer(
     async (msg: ConsumerMessage) => {
       try {
         const mergedObj = msg.getContent() as mergedObj;
 
-        selector(mergedObj, runType.DAILY);
+        await selector(mergedObj, runType.DAILY);
 
         msg.ack();
       } catch (error: any) {
@@ -47,7 +64,7 @@ export const connectRabbit = async () => {
 
         cleanObj(mergedObj);
 
-        selector(mergedObj, runType.RECOVERY);
+        await selector(mergedObj, runType.RECOVERY);
 
         msg.ack();
       } catch (error: any) {
@@ -60,17 +77,7 @@ export const connectRabbit = async () => {
     },
     { noAck: false }
   );
-};
-
-export const sendToEntityQueue = async (entityToBuild: mergedObj) => {
-  await menash.send(config.rabbit.sendDataEntity, entityToBuild);
-};
-
-export const sendToRogdQueue = async (record: record) => {
-  await menash.send(config.rabbit.sendDataRogd, record);
-};
-
-export default connectRabbit;
+}
 
 function cleanObj(obj: object) {
   Object.keys(obj).forEach((key) => {
