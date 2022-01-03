@@ -25,10 +25,14 @@ export const selector = async (mergeObj: mergedObj, type: runType = runType.DAIL
   }
 };
 
-function daily(mergeObj: mergedObj) {
+async function daily(mergeObj: mergedObj) {
   const record: record = findNewestRecord(mergeObj);
 
-  recordHandler(record, mergeObj);
+  try {
+    await recordHandler(record, mergeObj);
+  } catch (error) {
+    logger.warn(true, 'APP', 'MargeObj not pass (daily)', `${error}`, mergeObj.identifiers);
+  }
 }
 
 /**
@@ -39,9 +43,9 @@ export function recovery(mergeObj: mergedObj) {
   Object.keys(mergeObj).forEach((source) => {
     if (Array.isArray(mergeObj[source])) {
       const sourceRecords: mergedRecord[] = mergeObj[source];
-      sourceRecords.forEach(({ record }: mergedRecord) => {
+      sourceRecords.forEach(async ({ record }: mergedRecord) => {
         try {
-          recordHandler(record, mergeObj);
+          await recordHandler(record, mergeObj);
         } catch (error) {
           logger.warn(true, 'APP', 'MargeObj not pass', `${error}`, mergeObj.identifiers);
         }
