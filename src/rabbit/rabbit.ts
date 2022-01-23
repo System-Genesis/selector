@@ -11,11 +11,11 @@ export const connectRabbit = async () => {
   try {
     await menash.connect(config.rabbit.uri, config.rabbit.retryOptions);
 
-    await menash.declareQueue(config.rabbit.getDataSelector);
-    await menash.declareQueue(config.rabbit.getDataRecovery);
-    await menash.declareQueue(config.rabbit.sendDataEntity);
-    await menash.declareQueue(config.rabbit.sendDataRogdNormal);
-    await menash.declareQueue(config.rabbit.sendDataRogdMir);
+    await menash.declareQueue(config.rabbit.getDataSelector, { durable: true });
+    await menash.declareQueue(config.rabbit.getDataRecovery, { durable: true });
+    await menash.declareQueue(config.rabbit.sendDataEntity, { durable: true });
+    await menash.declareQueue(config.rabbit.sendDataRogdNormal, { durable: true });
+    await menash.declareQueue(config.rabbit.sendDataRogdMir, { durable: true });
 
     console.log('Rabbit connected');
   } catch (error: any) {
@@ -24,15 +24,15 @@ export const connectRabbit = async () => {
 };
 
 export const sendToEntityQueue = async (entityToBuild: mergedObj) => {
-  await menash.send(config.rabbit.sendDataEntity, entityToBuild);
+  await menash.send(config.rabbit.sendDataEntity, entityToBuild, { persistent: true });
 };
 
 export const sendToRogdQueueNormal = async (record: record) => {
-  await menash.send(config.rabbit.sendDataRogdNormal, record);
+  await menash.send(config.rabbit.sendDataRogdNormal, record, { persistent: true });
 };
 
 export const sendToRogdQueueMir = async (record: record) => {
-  await menash.send(config.rabbit.sendDataRogdMir, record);
+  await menash.send(config.rabbit.sendDataRogdMir, record, { persistent: true });
 };
 
 export default connectRabbit;
