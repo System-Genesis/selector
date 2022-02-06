@@ -14,7 +14,7 @@ QUEUES
 
 - mergedObject EXAMPLE
 - mergedObj :{
-       "_id" : ObjectId("61b9fe3272aeff3cbe6c0ed9"),
+-      "_id" : ObjectId("61b9fe3272aeff3cbe6c0ed9"),
         "aka" : [
             {
                 "record" : {
