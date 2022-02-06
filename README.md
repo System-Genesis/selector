@@ -13,7 +13,7 @@ QUEUES
 - selector --> buildROGD(Mir flow): BUILD_ROGD_MIR_QUEUE
 
 mergedObject EXAMPLE
--  mergedObj :
+  mergedObj :
 - {
         "_id" : ObjectId("61b9fe3272aeff3cbe6c0ed9"),
         "aka" : [
@@ -49,7 +49,7 @@ mergedObject EXAMPLE
        },
        "updatedAt" : ISODate("2021-12-15T14:39:46.817Z"),
        "lock" : 0
- }
+- }
 
 sent to BUILD_ENTITY_QUEUE
 - sent mergerObj
@@ -67,4 +67,4 @@ sent to BUILD_ROGD_QUEUE & BUILD_ROGD_MIR_QUEUE
   "birthDate" : "2016-09-01T19:52:53.303Z",
   "sex" : "female",
   "source" : "aka"
-  }
+-  }
