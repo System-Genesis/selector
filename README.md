@@ -14,7 +14,7 @@ QUEUES
 
 - mergedObject EXAMPLE
 - mergedObj :{
--       "_id" : ObjectId("61b9fe3272aeff3cbe6c0ed9"),
+       "_id" : ObjectId("61b9fe3272aeff3cbe6c0ed9"),
         "aka" : [
             {
                 "record" : {
@@ -48,21 +48,21 @@ QUEUES
         },
         "updatedAt" : ISODate("2021-12-15T14:39:46.817Z"),
         "lock" : 0
-  }
+        }
 
 sent to BUILD_ENTITY_QUEUE
 - sent mergerObj
 
 sent to BUILD_ROGD_QUEUE & BUILD_ROGD_MIR_QUEUE
-- single record: {
-- "firstName" : "Lucie",
-- "lastName" : "Rutherford",
-- "personalNumber" : "2615048",
-- "clearance" : "3",
-- "rank" : "champion",
-- "dischargeDay" : "2025-05-14T04:20:52.191Z",
-- "akaUnit" : "mordor",
-- "birthDate" : "2016-09-01T19:52:53.303Z",
-- "sex" : "female",
-- "source" : "aka"
-- }
+single record: {
+-        "firstName" : "Lucie",
+         "lastName" : "Rutherford",
+         "personalNumber" : "2615048",
+         "clearance" : "3",
+         "rank" : "champion",
+         "dischargeDay" : "2025-05-14T04:20:52.191Z",
+         "akaUnit" : "mordor",
+         "birthDate" : "2016-09-01T19:52:53.303Z",
+         "sex" : "female",
+         "source" : "aka"
+         }
