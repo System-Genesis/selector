@@ -4,8 +4,7 @@ import env from '../config/env.config';
 
 export function validC(mergeObj: mergedObj) {
   return (
-    mergeObj.identifiers.identityCard &&
-    JSON.stringify(mergeObj).includes('entityType":"' + fieldsName.entityType.c)
+    mergeObj.identifiers.identityCard && JSON.stringify(mergeObj).includes('entityType":"' + fieldsName.entityType.c)
   );
 }
 
@@ -19,8 +18,7 @@ export function isS(mergeObj: mergedObj) {
 
 export function validS(mergeObj: mergedObj) {
   return (
-    mergeObj.identifiers.personalNumber &&
-    JSON.stringify(mergeObj).includes('entityType":"' + fieldsName.entityType.s)
+    mergeObj.identifiers.personalNumber && JSON.stringify(mergeObj).includes('entityType":"' + fieldsName.entityType.s)
   );
 }
 
@@ -47,5 +45,11 @@ export function findNewestRecord(mergeObj: mergedObj) {
 
 export function isValidEntity(mergeObj: mergedObj) {
   const mergeString = JSON.stringify(mergeObj);
-  return env.requiredFields.reduce((bool, field) => mergeString.includes(field) && bool, true)
+  return env.requiredFields.reduce((bool, field) => mergeString.includes(field) && bool, true);
+}
+
+export function cleanObj(obj: object) {
+  Object.keys(obj).forEach((key) => {
+    if (obj[key] == null || obj[key] == undefined) delete obj[key];
+  });
 }

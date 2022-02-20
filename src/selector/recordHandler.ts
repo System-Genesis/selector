@@ -11,7 +11,9 @@ import { onlyMir } from './entityHandler';
  * @param mergeObj for logs
  */
 export async function recordHandler(record: record, mergeObj: mergedObj) {
-  if (record.userID) {
+  if (!record.userID) {
+    throw `${LOGS.WARN.RGB_NOT_SENDED} no userId, from ${record.source}`;
+  } else {
     if (mergeObj.mir && onlyMir(mergeObj)) {
       await sendToRogdQueueMir(record);
       logInfo(record.source!, mergeObj.identifiers, 'ROGD_MIR');
@@ -19,8 +21,6 @@ export async function recordHandler(record: record, mergeObj: mergedObj) {
       await sendToRogdQueueNormal(record);
       logInfo(record.source!, mergeObj.identifiers, 'ROGD_NORMAL');
     }
-  } else {
-    throw `${LOGS.WARN.RGB_NOT_SENDED} no userId, from ${record.source}`;
   }
 }
 

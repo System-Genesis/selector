@@ -5,6 +5,7 @@ import { selector } from '../selector/selector';
 import { mergedObj } from '../types/mergedType';
 import { record } from '../types/recordType';
 import { runType } from '../types/runType';
+import { cleanObj } from '../util/util';
 
 export const connectRabbit = async () => {
   console.log('Try to connect rabbit');
@@ -77,10 +78,4 @@ export async function consumeQueues() {
     },
     { noAck: false }
   );
-}
-
-function cleanObj(obj: object) {
-  Object.keys(obj).forEach((key) => {
-    if (obj[key] == null || obj[key] == undefined) delete obj[key];
-  });
 }
