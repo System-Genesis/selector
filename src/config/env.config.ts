@@ -13,6 +13,7 @@ export default {
     sendDataRogdMir: env.get('SEND_DATA_ROGD_MIR').required().asString(),
     getDataSelector: env.get('GET_DATA_SELECTOR').required().asString(),
     getDataRecovery: env.get('GET_DATA_RECOVERY').required().asString(),
+    getDeleteQueue: env.get('GET_DATA_KILL').required().asString(),
     logger: env.get('LOGGER').required().asString(),
     retryOptions: {
       minTimeout: env.get('RABBIT_RETRY_MIN_TIMEOUT').default(1000).asIntPositive(),
