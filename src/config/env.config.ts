@@ -21,4 +21,5 @@ export default {
       factor: env.get('RABBIT_RETRY_FACTOR').default(1.8).asFloatPositive(),
     },
   },
+  port: env.get('PORT').required().asInt(),
 };
