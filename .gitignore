@@ -8,3 +8,7 @@ dist/
 package-lock.json
 
 log/
+
+j.ts
+
+coverage/

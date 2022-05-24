@@ -1,0 +1,25 @@
+import './dotenv';
+
+import * as env from 'env-var';
+
+export default {
+  serviceName: env.get('SERVICE_NAME').required().asString(),
+  systemName: env.get('SYSTEM_NAME').required().asString(),
+  requiredFields: env.get('ENTITY_REQUIRED_FIELDS').required().asArray(),
+  rabbit: {
+    uri: env.get('MATCH_TO_KART_RABBIT_URI').required().asString(),
+    sendDataEntity: env.get('SEND_DATA_ENTITY').required().asString(),
+    sendDataRogdNormal: env.get('SEND_DATA_ROGD_NORMAL').required().asString(),
+    sendDataRogdMir: env.get('SEND_DATA_ROGD_MIR').required().asString(),
+    getDataSelector: env.get('GET_DATA_SELECTOR').required().asString(),
+    getDataRecovery: env.get('GET_DATA_RECOVERY').required().asString(),
+    getDeleteQueue: env.get('GET_DATA_KILL').required().asString(),
+    logger: env.get('LOGGER').required().asString(),
+    retryOptions: {
+      minTimeout: env.get('RABBIT_RETRY_MIN_TIMEOUT').default(1000).asIntPositive(),
+      retries: env.get('RABBIT_RETRY_RETRIES').default(10).asIntPositive(),
+      factor: env.get('RABBIT_RETRY_FACTOR').default(1.8).asFloatPositive(),
+    },
+  },
+  port: env.get('PORT').required().asInt(),
+};
